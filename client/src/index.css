@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme {
+  --color-bg-light: #ffffff;
+  --color-bg-dark: #0f172a;
+}
+
+body {
+  @apply bg-[#0f172a] text-slate-100 antialiased;
+}

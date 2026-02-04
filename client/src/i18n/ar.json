@@ -1,0 +1,41 @@
+{
+  "auth": {
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب جديد",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "username": "اسم المستخدم",
+    "profileImage": "الصورة الشخصية",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "noAccount": "ليس لديك حساب؟",
+    "loading": "جاري المعالجة...",
+    "success": "تم بنجاح!",
+    "error": "حدث خطأ",
+    "welcomeBack": "مرحباً بعودتك!",
+    "redirecting": "جاري التحويل لصفحة الدخول..."
+  },
+  "movies": {
+    "title": "عنوان الفيلم",
+    "description": "الوصف",
+    "addMovie": "إضافة فيلم جديد",
+    "editMovie": "تعديل الفيلم",
+    "deleteMovie": "حذف الفيلم",
+    "rating": "التقييم",
+    "reviews": "المراجعات",
+    "noReviews": "لا توجد مراجعات بعد.",
+    "addReview": "أضف مراجعة",
+    "search": "بحث عن أفلام..."
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "emailInvalid": "البريد الإلكتروني غير صحيح",
+    "passwordShort": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+    "usernameShort": "اسم المستخدم قصير جداً"
+  },
+  "common": {
+    "confirm": "تأكيد",
+    "cancel": "إلغاء",
+    "deleteConfirm": "هل أنت متأكد من عملية الحذف؟",
+    "save": "حفظ التغييرات"
+  }
+}
