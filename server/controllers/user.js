@@ -19,7 +19,7 @@ export const register = async (req, res, next) => {
       username,
       email,
       password, // Hashing happens in the Model pre-save now!
-      imgProfile: req.file ? req.file.path.replace(/\\/g, '/') : '',
+      imgProfile: req.file?.path || "",
     });
 
     res.status(201).json({

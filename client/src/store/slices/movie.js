@@ -19,13 +19,9 @@ export const addMovie = createAsyncThunk(
   'movies/addMovie',
   async (formData, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token'); // or your auth logic
-      const response = await api.post('/movies', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // Remove Content-Type - axios sets it automatically for FormData
+      // Remove Authorization - your interceptor handles it
+      const response = await api.post('/movies', formData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
@@ -53,21 +49,17 @@ export const deleteMovie = createAsyncThunk(
 );
 
 export const updateMovie = createAsyncThunk(
-  "movies/updateMovie",
+  'movies/updateMovie',
   async ({ id, formData }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
 
-      const res = await api.put(
-        `/movies/${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const res = await api.put(`/movies/${id}`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
       return res.data;
     } catch (err) {
@@ -75,7 +67,6 @@ export const updateMovie = createAsyncThunk(
     }
   }
 );
-
 
 const movieSlice = createSlice({
   name: 'movies',
@@ -123,18 +114,19 @@ const movieSlice = createSlice({
         const index = state.movies.findIndex(
           (m) => m._id === action.payload._id
         );
-        
+
         if (index !== -1) {
           // استخراج اللغة الحالية (ar أو en)
           const currentLang = i18next.language || 'en';
-          
+
           // تحويل البيانات الكاملة العائدة من السيرفر إلى الشكل المختصر المعتاد في الصفحة الرئيسية
           const updatedMovieFormatted = {
             ...action.payload,
-            title: action.payload.title[currentLang] || action.payload.title['en'],
+            title:
+              action.payload.title[currentLang] || action.payload.title['en'],
             desc: action.payload.desc[currentLang] || action.payload.desc['en'],
           };
-      
+
           state.movies[index] = updatedMovieFormatted;
         }
       });

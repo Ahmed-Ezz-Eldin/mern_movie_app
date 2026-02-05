@@ -1,17 +1,18 @@
+import { deleteFromCloudinary } from '../config/cloudinaryDelete.js';
 import Movie from '../models/movie.js';
-import fs from 'fs/promises';
-import path from 'path';
+// import fs from 'fs/promises';
+// import path from 'path';
 
 // Clean, reusable async file deletion
-const deleteFile = async (filePath) => {
-  if (!filePath) return;
-  try {
-    const absolutePath = path.resolve(filePath);
-    await fs.unlink(absolutePath);
-  } catch (err) {
-    console.error(`Cleanup error: ${filePath}`, err.message);
-  }
-};
+// const deleteFile = async (filePath) => {
+//   if (!filePath) return;
+//   try {
+//     const absolutePath = path.resolve(filePath);
+//     await fs.unlink(absolutePath);
+//   } catch (err) {
+//     console.error(`Cleanup error: ${filePath}`, err.message);
+//   }
+// };
 
 export const getAllMovies = async (req, res) => {
   try {
@@ -64,24 +65,42 @@ export const getSingleMovie = async (req, res) => {
 
 export const createMovie = async (req, res, next) => {
   try {
+    console.log("FILES:", req.files);
+    console.log("BODY:", req.body);
+
     const movie = await Movie.create({
-      title: { en: req.body['title.en'], ar: req.body['title.ar'] },
-      desc: { en: req.body['desc.en'], ar: req.body['desc.ar'] },
+      title: {
+        en: req.body["title.en"],
+        ar: req.body["title.ar"],
+      },
+      desc: {
+        en: req.body["desc.en"],
+        ar: req.body["desc.ar"],
+      },
       price: Number(req.body.price),
-      posterImg: req.files?.posterImg?.[0]?.path.replace(/\\/g, '/'),
-      videoUrl: req.files?.videoUrl?.[0]?.path.replace(/\\/g, '/'),
+
+      posterImg: req.files?.posterImg?.[0]
+        ? {
+            url: req.files.posterImg[0].path,
+            public_id: req.files.posterImg[0].public_id,
+          }
+        : null,
+
+      videoUrl: req.files?.videoUrl?.[0]
+        ? {
+            url: req.files.videoUrl[0].path,
+            public_id: req.files.videoUrl[0].public_id,
+          }
+        : null,
+
       createdBy: req.user.id,
     });
 
     res.status(201).json(movie);
   } catch (error) {
-    if (req.files) {
-      Object.values(req.files).flat().forEach(f => deleteFile(f.path));
-    }
     next(error);
   }
 };
-
 export const updateMovie = async (req, res, next) => {
   try {
     const movie = await Movie.findById(req.params.id);
@@ -95,17 +114,31 @@ export const updateMovie = async (req, res, next) => {
       price: req.body.price ?? movie.price,
     };
 
+    // 🔁 Update poster
     if (req.files?.posterImg?.[0]) {
-      await deleteFile(movie.posterImg);
-      updateData.posterImg = req.files.posterImg[0].path.replace(/\\/g, '/');
+      await deleteFromCloudinary(movie.posterImg?.public_id, 'image');
+
+      updateData.posterImg = {
+        url: req.files.posterImg[0].path,
+        public_id: req.files.posterImg[0].filename,
+      };
     }
 
+    // 🔁 Update video
     if (req.files?.videoUrl?.[0]) {
-      await deleteFile(movie.videoUrl);
-      updateData.videoUrl = req.files.videoUrl[0].path.replace(/\\/g, '/');
+      await deleteFromCloudinary(movie.videoUrl?.public_id, 'video');
+
+      updateData.videoUrl = {
+        url: req.files.videoUrl[0].path,
+        public_id: req.files.videoUrl[0].filename,
+      };
     }
 
-    const updated = await Movie.findByIdAndUpdate(req.params.id, updateData, { new: true, runValidators: true });
+    const updated = await Movie.findByIdAndUpdate(req.params.id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
     res.status(200).json(updated);
   } catch (error) {
     next(error);
@@ -117,7 +150,11 @@ export const deleteMovie = async (req, res) => {
     const movie = await Movie.findById(req.params.id);
     if (!movie) return res.status(404).json({ message: 'Movie not found' });
 
-    await Promise.all([deleteFile(movie.posterImg), deleteFile(movie.videoUrl)]);
+    await Promise.all([
+      deleteFromCloudinary(movie.posterImg?.public_id, 'image'),
+      deleteFromCloudinary(movie.videoUrl?.public_id, 'video'),
+    ]);
+
     await movie.deleteOne();
 
     res.status(200).json({ message: 'Deleted successfully' });

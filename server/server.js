@@ -8,13 +8,13 @@ import reviewsRoutes from "./routes/review.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 import path from "path";
 dotenv.config();
-connectDB();
+
 const port = process.env.PORT || 4000;
 const app = express();
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
@@ -25,3 +25,4 @@ app.use("/api/reviews", reviewsRoutes);
 app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
+connectDB();
