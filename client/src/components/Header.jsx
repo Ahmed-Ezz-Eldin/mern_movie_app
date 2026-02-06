@@ -75,7 +75,7 @@ export default function Header() {
                 
                 <div className="flex items-center gap-3 bg-slate-900/50 p-1 pr-3 rtl:pr-1 rtl:pl-3 rounded-full border border-slate-800">
                   <img
-                    src={user.imgProfile ? `${serverAPI}/${user.imgProfile}` : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}
+                    src={user.imgProfile ? `${user.imgProfile.url}` : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}
                     alt="profile"
                     className="w-8 h-8 rounded-full object-cover border border-blue-500/50"
                   />
@@ -124,9 +124,9 @@ export default function Header() {
               {user && (
                 <div className="flex items-center gap-3 pb-4 border-b border-slate-800">
                   <img
-                    src={user.imgProfile ? `${serverAPI}/${user.imgProfile}` : '/default-avatar.png'}
+                    src={user.imgProfile.url ? user.imgProfile.url : '/default-avatar.png'}
                     className="w-10 h-10 rounded-full"
-                    alt=""
+                    alt="profile"
                   />
                   <div>
                     <p className="font-bold">{user.username}</p>

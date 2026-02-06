@@ -77,7 +77,7 @@ export default function MovieDetails() {
 
       <div className="relative h-[70vh] w-full">
         <img
-          src={`${serverAPI}/${movie.posterImg}`}
+          src={movie.posterImg.url}
           className="w-full h-full object-cover opacity-20 blur-sm scale-110"
           alt="backdrop"
         />
@@ -96,7 +96,7 @@ export default function MovieDetails() {
               className="hidden md:block"
             >
               <img
-                src={`${serverAPI}/${movie.posterImg}`}
+                src={movie.posterImg.url}
                 className="w-full rounded-2xl shadow-[0_0_50px_rgba(37,99,235,0.2)] border border-slate-700/50"
                 alt={movie.title}
               />
@@ -156,10 +156,10 @@ export default function MovieDetails() {
       >
         <div className="aspect-video bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl">
           <video
-            src={`${serverAPI}/${movie.videoUrl}`}
+            src={movie.videoUrl.url}
             controls
             className="w-full h-full object-contain"
-            poster={`${serverAPI}/${movie.posterImg}`}
+            poster={movie.posterImg.url}
           />
         </div>
       </motion.div>
@@ -250,7 +250,7 @@ export default function MovieDetails() {
   <div className="w-12 h-12 rounded-full border-2 border-blue-500 overflow-hidden bg-slate-800 flex items-center justify-center relative shadow-inner">
     {review.user?.imgProfile ? (
       <img
-        src={`${serverAPI}/${review.user.imgProfile}`}
+        src={review.user.imgProfile.url}
         className="w-full h-full object-cover z-10"
         alt={review.user.username}
         onError={(e) => {

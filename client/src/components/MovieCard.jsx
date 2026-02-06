@@ -15,7 +15,7 @@ const MovieCard = memo(({ movie, index, user, onDelete }) => {
             {/* Image & Link */}
             <Link to={`/movie/${movie._id}`} className="block overflow-hidden aspect-[2/3]">
                 <img
-                    src={`${serverAPI}/${movie.posterImg}`}
+                    src={movie.posterImg.url}
                     alt={movie.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />

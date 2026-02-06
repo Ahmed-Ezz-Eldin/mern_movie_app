@@ -2,7 +2,8 @@
 import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudinary.js";
-
+import dotenv from 'dotenv';
+dotenv.config();
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
@@ -10,7 +11,7 @@ const storage = new CloudinaryStorage({
       return {
         folder: "movies/posters",
         resource_type: "image",
-        format: "jpg",
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp']
       };
     }
 

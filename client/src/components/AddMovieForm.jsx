@@ -3,7 +3,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { Upload, Film, DollarSign, Languages, AlertCircle, CheckCircle2 } from 'lucide-react';
+import {
+  Upload,
+  Film,
+  DollarSign,
+  Languages,
+  AlertCircle,
+  CheckCircle2,
+} from 'lucide-react';
 import Swal from 'sweetalert2'; // استيراد SweetAlert2
 
 import { movieSchema } from '../schema/movieSchema';
@@ -91,8 +98,6 @@ const AddMovieForm = () => {
   // ... باقي كود الـ JSX الخاص بالنموذج (Form) كما هو في الرد السابق
   return (
     <div className="min-h-screen bg-[#020617] py-12 px-4 sm:px-6 lg:px-8">
-  
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -248,4 +253,4 @@ const AddMovieForm = () => {
   );
 };
 
-export  default AddMovieForm
+export default AddMovieForm;

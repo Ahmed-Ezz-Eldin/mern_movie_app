@@ -33,12 +33,12 @@ export const deleteMovie = createAsyncThunk(
   'movies/deleteMovie',
   async (id, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
+      // const token = localStorage.getItem('token');
 
       await api.delete(`/movies/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       });
 
       return id;
@@ -52,13 +52,13 @@ export const updateMovie = createAsyncThunk(
   'movies/updateMovie',
   async ({ id, formData }, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem('token');
+      // const token = localStorage.getItem('token');
 
       const res = await api.put(`/movies/${id}`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        //   'Content-Type': 'multipart/form-data',
+        // },
       });
 
       return res.data;
@@ -110,6 +110,11 @@ const movieSlice = createSlice({
         );
       })
 
+      .addCase(updateMovie.pending, (state) => {
+        state.loading = true; // 👈 This is what disables the button
+        state.error = null;
+      })
+
       .addCase(updateMovie.fulfilled, (state, action) => {
         const index = state.movies.findIndex(
           (m) => m._id === action.payload._id
@@ -129,6 +134,11 @@ const movieSlice = createSlice({
 
           state.movies[index] = updatedMovieFormatted;
         }
+      })
+
+      .addCase(updateMovie.rejected, (state, action) => {
+        state.loading = false; // 👈 Re-enables the button on error
+        state.error = action.payload;
       });
   },
 });

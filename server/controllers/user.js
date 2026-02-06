@@ -18,8 +18,13 @@ export const register = async (req, res, next) => {
     const user = await User.create({
       username,
       email,
-      password, // Hashing happens in the Model pre-save now!
-      imgProfile: req.file?.path || "",
+      password,
+      imgProfile: req.file
+        ? {
+            url: req.file.path,
+            public_id: req.file.public_id,
+          }
+        : null,
     });
 
     res.status(201).json({
