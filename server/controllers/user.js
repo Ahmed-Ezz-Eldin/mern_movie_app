@@ -61,6 +61,7 @@ export const login = async (req, res, next) => {
       throw new Error('Invalid email or password');
     }
   } catch (error) {
+    console.log("error", error.message);
     next(error);
   }
 };

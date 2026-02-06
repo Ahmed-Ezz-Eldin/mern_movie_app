@@ -16,11 +16,15 @@ export const loginUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (data, thunkAPI) => {
+  async (formData, thunkAPI) => {
     try {
-      await api.post('/auth/signup', data);
+      const response = await api.post('/auth/signup', formData);
+      return response.data; // 👈 MUST return this for .fulfilled
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data.message);
+      console.log(err);
+      // Ensure we grab the actual message from the server error
+      const message = err.response?.data?.message || err.message;
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );

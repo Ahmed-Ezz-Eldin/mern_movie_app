@@ -46,16 +46,21 @@ export default function Register() {
     return () => { dispatch(resetError()); };
   }, [dispatch]);
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data) => { // 1. Added async
     const formData = new FormData();
     formData.append('username', data.username);
     formData.append('email', data.email);
     formData.append('password', data.password);
-    if (data.imgProfile?.[0]) formData.append('imgProfile', data.imgProfile[0]);
-
-    const result = await dispatch(registerUser(formData));
-
-    if (!result.error) {
+    
+    if (data.imgProfile?.[0]) {
+      formData.append('imgProfile', data.imgProfile[0]);
+    }
+  
+    // 2. Await the dispatch and use .unwrap() to handle errors easily
+    try {
+      await dispatch(registerUser(formData)).unwrap();
+      
+      // If it reaches here, it was successful
       Swal.fire({
         icon: 'success',
         title: t('auth.success'),
@@ -66,11 +71,13 @@ export default function Register() {
         color: '#fff',
       });
       navigate('/login');
-    } else {
+      
+    } catch (error) {
+      // Error is caught here from rejectWithValue
       Swal.fire({
         icon: 'error',
         title: t('auth.error'),
-        text: result.payload, // رسالة الخطأ القادمة من السيرفر
+        text: error, // This will be the message from thunkAPI.rejectWithValue
         background: '#0f172a',
         color: '#fff',
       });
