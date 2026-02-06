@@ -13,8 +13,7 @@ const port = process.env.PORT || 4000;
 const app = express();
 app.use(cors({
   origin: [
-    'http://localhost:5173',
-    // 'https://mern-movie.vercel.app', // your frontend domain (if deployed)
+   "https://movie-app-rouge-eta.vercel.app/"
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
