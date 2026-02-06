@@ -1,12 +1,10 @@
 import axios from "axios";
-// export const serverAPI = import.meta.env.VITE_API_URL
-// export const serverAPI = "http://localhost:5000";
-export const serverAPI = "https://mern-movie-api-gray.vercel.app";
+export const serverAPI = import.meta.env.VITE_API_URL
+
 
 const api = axios.create({
-  // baseURL: `${import.meta.env.VITE_API_URL}/api`,
-  // baseURL: `http://localhost:5000/api`,
-  baseURL: `https://mern-movie-api-gray.vercel.app/api`,
+  baseURL: `${import.meta.env.VITE_API_URL}/api`,
+
 });
 
 api.interceptors.request.use((config) => {
