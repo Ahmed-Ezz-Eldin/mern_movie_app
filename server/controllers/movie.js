@@ -1,18 +1,6 @@
 import { deleteFromCloudinary } from '../config/cloudinaryDelete.js';
 import Movie from '../models/movie.js';
-// import fs from 'fs/promises';
-// import path from 'path';
-
-// Clean, reusable async file deletion
-// const deleteFile = async (filePath) => {
-//   if (!filePath) return;
-//   try {
-//     const absolutePath = path.resolve(filePath);
-//     await fs.unlink(absolutePath);
-//   } catch (err) {
-//     console.error(`Cleanup error: ${filePath}`, err.message);
-//   }
-// };
+import Review from "../models/review.js";
 
 export const getAllMovies = async (req, res) => {
   try {
