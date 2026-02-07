@@ -8,22 +8,42 @@ import reviewsRoutes from "./routes/review.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
-connectDB();
-
+const port = process.env.PORT || 4000;
 const app = express();
 
-app.use(cors({
-  origin: [
-    "https://movie-app-rouge-eta.vercel.app",
-    "http://localhost:5173"
-  ],
+connectDB();
+
+// CORS Configuration - MUST be before routes
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "https://movie-app-rouge-eta.vercel.app",
+      "http://localhost:5173",
+      "http://localhost:5174"
+    ];
+    
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Length', 'X-Request-Id'],
+  maxAge: 86400, // 24 hours
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
 
+app.use(cors(corsOptions));
 
-app.options("*", cors());
+// Handle preflight requests explicitly
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,4 +58,4 @@ app.use("/api/reviews", reviewsRoutes);
 
 app.use(errorHandler);
 
-export default app;
+app.listen(port, () => console.log(`Server running on port ${port}`));
