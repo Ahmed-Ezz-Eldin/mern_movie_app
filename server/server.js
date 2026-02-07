@@ -13,7 +13,6 @@ const app = express();
 
 connectDB();
 
-// CORS Configuration - MUST be before routes
 const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
